@@ -4,17 +4,29 @@
 #include <stdlib.h>
 #include <math.h>
 using namespace std;
-int flith_number_maker();
-int find_type(int);
-int Band_capacity(int,int [],int);
-int main(){
 
-    cout<<flith_number_maker()<<" is your special flith_number"<<endl;
+class list;
+class airport{
+    friend class List;
+    public:
+     int flith_number[1000];         // **test**
+     int delete(){
+         cout<< "Enter the flith_number for take_off:";
+         int f_number;
+         cin >> f_number;
+         	numbers.deletespecific(value);
+         	cout<< "your airplain taking_off"<<endl;
+     }
+    
+    int flith_number_maker(){
+    
+    // functions
+  
+   // int find_type(int);
+  //  int Band_capacity(int,int [],int);
     
     
-    return 0;
-}
-int flith_number_maker(){
+        // Variables
     int answer=0;
     int clock_flith_hour;
     string clock_flith_minute;
@@ -22,11 +34,10 @@ int flith_number_maker(){
     int model;
     int band;
     int passengers;
-    int flith_number[1000];         // test
-    for(int i=0 ; i < 1000 ; i++)
-    flith_number[i]=0;
-    
    
+   
+    
+  
     
     // clock
     cout<<"***Enter the clock flith ('00:00')*** "<<endl;
@@ -47,9 +58,8 @@ int flith_number_maker(){
         }
         
     //type    
-        cout << "Enter type of flith( 'landing' or 'take-off'): ";
-        cin >> type;
-        if(type=="landing"){
+        
+      
         answer = answer + 100000;
     //model
     cout<<"Enter model of airplain:";
@@ -58,12 +68,13 @@ int flith_number_maker(){
     
     // band
     int yellow_lamp=0;
+    
        for(int i=(model/2)+1 ; i <= 5 ; i++){
            if (Band_capacity(i , flith_number ,answer/1000000 ) >0 ){
                cout<<"your band is:"<<i<<endl;
                yellow_lamp++;
                answer=answer+(1000 * model);
-                  cout<<"Band capacity:"<<Band_capacity(i , flith_number ,answer )<<endl;
+                  cout<<"Band"<<(i)<<" capacity is "<<Band_capacity(i , flith_number ,answer/1000000 )-1<<" now"<<endl;
                break;
            }
            
@@ -77,14 +88,11 @@ int flith_number_maker(){
         
         return answer;
         
-        }else{ // **************************************important************************
-            
-            }
+       
 }
 int find_type(int number){
-    char find[10];
-        sprintf(find, "%d", number);
-       if(find[3]=='0')
+    
+       if((number/100000%10)==0)
        return 0;
        else
        return 1;
@@ -105,6 +113,19 @@ int Band_capacity(int band , int flith_number_[1000] , int time_){
 
     return 2-answer;
 }
+};
+int main(){
+        
+        airport ebi;
+    cout<<ebi.flith_number_maker()<<" is your special flith_number"<<endl;
+    
+    
+    return 0;
+}
+
+  
+    
+
 
 
 
