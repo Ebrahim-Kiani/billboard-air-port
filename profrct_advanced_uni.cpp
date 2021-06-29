@@ -1,6 +1,10 @@
 #include <iostream>
+#include <string>
+#include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 using namespace std;
+
 struct node
 {
 	int info;
@@ -13,7 +17,11 @@ NODEPTR makeNode(int);
 //class
 class List
 {
+    friend class airport;
+    
 public:
+      //**** important_flith_number 
+
 	List();
 	~List();
 	void deletEndNode();
@@ -25,9 +33,128 @@ public:
 	void addspecific(int);
 	void deletespecific(int);
 	int deleteAllspecific(int);
+	void deletee();
+	void translator(int );
+	int flith_number_maker();
+	int find_type(int);
+	int Band_capacity(int  , int [1000] , int );
+
+
+	     int flith_number[1000];         // **test**
+
 private:
 	NODEPTR listptr;
 };
+ 
+     void List::deletee(){
+         cout<< "Enter the flith_number for take_off:";
+         int f_number;
+         cin >> f_number;
+         	deletespecific(f_number);
+         	cout<< "your airplain taking_off"<<endl;
+     }
+
+    int List::flith_number_maker(){
+           printlist();
+
+    
+    // functions
+  
+   // int find_type(int);
+  //  int Band_capacity(int,int [],int);
+    
+    
+        // Variables
+    int answer=0;
+    int clock_flith_hour;
+    string clock_flith_minute;
+    string type;
+    int model;
+    int band;
+    int passengers;
+   
+   
+    
+  
+    
+    // clock
+    cout<<"***Enter the clock flith ('00:00')*** "<<endl;
+    cout << "Enter the hour of flith :";
+    cin >> clock_flith_hour;
+    
+    answer=clock_flith_hour*10000000;
+   
+   correctly: cout<<"Enter the minute of flith('00' or '30'):";
+    cin >> clock_flith_minute;
+    
+    if(clock_flith_minute=="00" || clock_flith_minute=="30"){
+        if(clock_flith_minute=="30")
+        answer = answer + (5*1000000);
+        
+    }else{ cout << "Please enter correctly"<<endl;
+            goto correctly;
+        }
+        
+    //type    
+        
+      
+        answer = answer + 100000;
+    //model
+    cout<<"Enter model of airplain:";
+    cin >> model;
+    answer = answer + (10000 * model);
+    
+    // band
+    int yellow_lamp=0;
+    
+       for(int i=(model/2)+1 ; i <= 5 ; i++){
+           if (Band_capacity(i , flith_number ,answer/1000000 ) >0 ){
+               cout<<"your band is:"<<i<<endl;
+               yellow_lamp++;
+               answer=answer+(1000 * i);
+                  cout<<"Band ("<<(i)<<") capacity is "<<Band_capacity(i , flith_number ,answer/1000000 )-1<<" now"<<endl;
+               break;
+           }
+           
+       }if(yellow_lamp==0)cout<<"All suitable bands are full you must try again at 30 minutes later"<<endl;
+        
+    // passengers
+    cout<<"Enter the number of passengers:";
+    cin >> passengers;
+    answer +=passengers;
+        // finished
+        insertend(answer);
+        return answer;
+        
+       
+}
+int  List::find_type(int number){
+    
+       if((number/100000%10)==0)
+       return 0;
+       else
+       return 1;
+}
+int List::Band_capacity(int band , int flith_number_[1000] , int time_){
+    int i=0;
+   int answer=0;
+    
+    while(flith_number_[i] !=0){
+        int timy=0;
+        int bandy=0;
+        timy=flith_number_[i]/1000000;
+      bandy= (flith_number_[i]/1000)%10;
+        if(bandy == band && timy==time_)
+        answer++;
+        i++;
+    }
+
+    return 2-answer;
+}
+
+
+
+
 //constructor
 List::List()
 {
@@ -87,14 +214,24 @@ NODEPTR makeNode(int number)
 //have in the list
 void List::printlist()
 {
+   for (int i=0 ; i < 1000 ; i++)
+   flith_number[i]=0; 
+
+int i=0;
 	NODEPTR currPtr;
 	if(emptylist())
 		cout<<"\nthe list is empty\n";
 	else
 	{
 		cout<<endl;
-		for(currPtr=listptr;currPtr!=NULL;currPtr=currPtr->next)
-			cout<<currPtr->info<<endl;
+		for(currPtr=listptr;currPtr!=NULL;currPtr=currPtr->next){
+		    
+		flith_number[i]=currPtr->info;
+	
+		i++;
+		//	cout<<currPtr->info<<endl;
+		}
+		
 	}
 }
 //checking if the list is NULL
@@ -320,72 +457,96 @@ void List::deletespecific(int value)
 	cout<<"\nValue "<<value<<" was not found"<<endl;
 	return;
 }
-
+void List::translator(int band){
+   printlist();
+   
+    
+    for(int i=0 ; i < 1000; i++)
+        for(int j=0 ; j < 1000 ; j++){
+            if(flith_number[j]<flith_number[i]){
+                flith_number[j]=flith_number[i]+flith_number[j];
+                flith_number[i]=flith_number[j]-flith_number[i];
+                flith_number[j]=flith_number[j]-flith_number[i];
+            }
+        }
+        int i=0;
+    if(band==0){
+    while(flith_number[i]!=0){
+    cout << "hour:"<<flith_number[i]/10000000;
+    if(flith_number[i]/1000000 %10==5 )
+    cout<<"  minute:"<<30;
+    else
+    cout<<"  minute:"<<00;
+    if(flith_number[i]/100000%10==1)
+    cout<<"  type: landing";
+    else
+    cout<<" type: taking_off";
+    cout<<"  model:"<<flith_number[i]/10000 %10;
+    cout<<"  band:"<<flith_number[i]/1000 %10;
+    cout<<"  passengers:"<<flith_number[i]%1000<<endl;
+    i++;
+    }
+    }
+    else{
+        while(flith_number[i]!=0){
+        if(flith_number[i]/1000 %10==band){
+         cout << "hour:"<<flith_number[i]/10000000;
+    if(flith_number[i]/1000000 %10==5 )
+    cout<<"  minute:"<<30;
+    else
+    cout<<"  minute:"<<00;
+    
+    cout<<"  type:"<<flith_number[i]/100000 %10;
+    cout<<"  model:"<<flith_number[i]/10000 %10;
+    
+    cout<<"  band:"<<flith_number[i]/1000 %10;
+    cout<<"  passengers:"<<flith_number[i]%1000<<endl;
+    i++;
+    }
+    }
+    }
+}
 
 //main driver.  The main driver will call the functions
 //and the user will add or delete the node he or she chooses
 
+
+
+
 int main(){
-	List numbers;
-	int choice, value;
-	int count;
+    cout<<"There are 10 models of airplain"<<endl;
+    cout<<"number 1,2 -->band(1)"<<endl;
+    cout<<"number 3,4 -->band(2)"<<endl;
+    cout<<"number 5,6 -->band(3)"<<endl;
+    cout<<"number 7,8 -->band(4)"<<endl;
+    cout<<"number 9,10-->band(5)"<<endl;
+     List ebi;
+  help:      int choice=0;
+ 
+  while(choice!=5){
+        cout<<endl<<"main Menu:"<<endl;
+        cout<<"1.landing"<<endl;
+        cout<<"2.taking_off(or delete from List)"<<endl;
+        cout<<"3.Print special band List(you can Enter '0' to print all list) "<<endl;
+        cout<<"4.main Menu"<<endl;
+        cout<<"5.End program"<<endl;        
+        
+        cout<<"Enter your choice:";
+        cin>>choice;
+        switch(choice){
+    case 1:cout<<ebi.flith_number_maker()<<" is your special flith_number"<<endl;       break;
 
-	do
-	{
-		cout<<"\n1.ADD to the front of list"<<endl
-			<<"2.ADD to end of list"<<endl
-			<<"3.ADD element after a specific element in list"<<endl
-			<<"4.DELETE the first element in the list"<<endl
-			<<"5.DELETE the last element in the list"<<endl
-			<<"6.DELETE a specific element"<<endl
-			<<"7.DELETE all nodes containin the same value"<<endl
-			<<"8.PRINT the list"<<endl
-			<<"9.END the program"<<endl;
+    
+    case 2:cout<<"Enter the flight number:"; int airplain; cin>>airplain;ebi.deletespecific(airplain);       break;
 
-		cout<<"enter your choice: ";
-		cin>>choice;
-		switch(choice)
-		{
-		case 1:
-			cout<<"enter the number to add to front: ";
-			cin>>value;
-			numbers.addFront(value);
-			break;
-		case 2:
-			cout<<"enter the number to be added: ";
-			cin>>value;
-			numbers.insertend(value);
-			break;
-		case 3:
-			numbers.addspecific(value);
-			break;
-		case 4:
-			numbers.deleteFront();
-			break;
-		case 5:
-			numbers.deletEndNode();
-			break;
-		case 6:
-			cout<<"Enter the value you wish to delete: ";
-			cin>>value;
-			numbers.deletespecific(value);
-			break;
-		case 7:
-			cout<<"Enter the number that are more than one: ";
-			cin>>value;
-			count = numbers.deleteAllspecific(value);
-			cout<<"\nnodes deleted: "<<count<<endl;
-			break;
-		case 8:
-			numbers.printlist();
-			break;
-		case 9:
-			break;
-		default:
-			cout<<endl<<">>>>>>Invalid choice<<<<<<< "<<endl;
+    
+    case 3:int band ;cout<<"Enter the band number:" ;cin >> band;ebi.translator(band);       break;
 
-		}
-	}while(choice !=9);
+    
+    case 4:goto help ;   
+       break;
+         
+        }
+  }
+    return 0;
 }
-//end of program
-
